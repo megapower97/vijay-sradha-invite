@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .font-serif-wedding {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+  .font-script {
+    font-family: 'Great Vibes', cursive;
+  }
+  .font-sans-clean {
+    font-family: 'Montserrat', sans-serif;
+  }
+}
+
+@keyframes floatPetal {
+  0% {
+    transform: translateY(-10vh) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.45;
+  }
+  80% {
+    opacity: 0.45;
+  }
+  100% {
+    transform: translateY(105vh) translateX(35px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes waterRipple {
+  0%, 100% {
+    transform: scaleX(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scaleX(1.22);
+    opacity: 0.9;
+  }
+}
+
+@keyframes softFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes trainPass {
+  0% {
+    transform: translateX(-450px);
+  }
+  100% {
+    transform: translateX(1350px);
+  }
+}
+
+@keyframes boatDrift {
+  0%, 100% {
+    transform: translateX(0px) translateY(0px);
+  }
+  50% {
+    transform: translateX(28px) translateY(-2px);
+  }
+}
+
+@keyframes lanternRise {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.8);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  80% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(-260px) translateX(20px) scale(1.05);
+    opacity: 0;
+  }
+}
+
+.animate-petal {
+  animation: floatPetal linear infinite;
+}
+
+.animate-water-ripple {
+  animation: waterRipple 3.2s ease-in-out infinite;
+}
+
+.animate-fade-up {
+  animation: softFadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-train {
+  animation: trainPass 7.5s linear infinite;
+}
+
+.animate-boat {
+  animation: boatDrift 6s ease-in-out infinite;
+}
+
+.animate-lantern {
+  animation: lanternRise 6.5s ease-out infinite;
+}
+
+/* Light Natural Handmade Paper Card */
+.natural-paper-card {
+  background-color: #FCFBF9;
+  background-image: 
+    radial-gradient(rgba(197, 160, 89, 0.07) 1px, transparent 0),
+    radial-gradient(rgba(197, 160, 89, 0.04) 1px, #FCFBF9 0);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+  box-shadow: 
+    0 20px 50px -12px rgba(140, 120, 95, 0.16),
+    0 0 1px 1px rgba(197, 160, 89, 0.25);
+}
