@@ -4,7 +4,6 @@ import { ScratchCard } from './components/ScratchCard';
 
 // ============================================================================
 // 📸 FUTURE PHOTO GALLERY CONFIGURATION
-// Drop your photos into `public/images/` (e.g., couple-1.jpg) anytime!
 // ============================================================================
 const GALLERY_PHOTOS = [
   {
@@ -45,8 +44,6 @@ const GALLERY_PHOTOS = [
   },
 ];
 
-type MusicTheme = 'custom' | 'nadaswaram' | 'flute' | 'veena';
-
 export function App() {
   const [stage, setStage] = useState<'dusk' | 'lit' | 'opened'>('dusk');
   const [activePage, setActivePage] = useState<'invite' | 'gallery'>('invite');
@@ -56,15 +53,24 @@ export function App() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [wishesSent, setWishesSent] = useState(false);
 
+  // Custom Music State
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
-  const [musicTheme, setMusicTheme] = useState<MusicTheme>('flute');
-  const [showMusicMenu, setShowMusicMenu] = useState(false);
-
-  const audioCtxRef = useRef<AudioContext | null>(null);
-  const melodyIntervalRef = useRef<number | null>(null);
   const customAudioRef = useRef<HTMLAudioElement | null>(null);
 
   const TOTAL_STREETLIGHTS = 16;
+
+  // Initialize Custom Audio
+  useEffect(() => {
+    const audio = new Audio('/wedding-music.mp3');
+    audio.loop = true;
+    audio.volume = 0.7;
+    customAudioRef.current = audio;
+
+    return () => {
+      audio.pause();
+      audio.src = '';
+    };
+  }, []);
 
   // Countdown to Dec 3, 2026 7:00 PM IST
   useEffect(() => {
@@ -98,141 +104,23 @@ export function App() {
     return () => clearInterval(timer);
   }, [stage]);
 
-  useEffect(() => {
-    return () => {
-      if (melodyIntervalRef.current) window.clearInterval(melodyIntervalRef.current);
-      if (audioCtxRef.current) audioCtxRef.current.close();
-    };
-  }, []);
-
-  const stopAllAudio = () => {
+  const playCustomMusic = () => {
     if (customAudioRef.current) {
-      customAudioRef.current.pause();
-    }
-    if (melodyIntervalRef.current) {
-      window.clearInterval(melodyIntervalRef.current);
-      melodyIntervalRef.current = null;
-    }
-  };
-
-  const startWeddingMusic = (themeToPlay: MusicTheme = musicTheme) => {
-    stopAllAudio();
-
-    if (themeToPlay === 'custom') {
-      if (!customAudioRef.current) {
-        const audio = new Audio('/wedding-music.mp3');
-        audio.loop = true;
-        audio.volume = 0.6;
-        customAudioRef.current = audio;
-      }
       customAudioRef.current
         .play()
         .then(() => setIsPlayingMusic(true))
-        .catch(() => {
-          playSynthesizedTheme('flute');
-        });
-    } else {
-      playSynthesizedTheme(themeToPlay);
+        .catch((e) => console.log('Audio requires user interaction or file is missing:', e));
     }
-  };
-
-  const playSynthesizedTheme = (theme: Exclude<MusicTheme, 'custom'>) => {
-    const AudioCtx =
-      window.AudioContext ||
-      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    if (!audioCtxRef.current) {
-      audioCtxRef.current = new AudioCtx();
-    }
-    const ctx = audioCtxRef.current;
-    if (ctx.state === 'suspended') ctx.resume();
-
-    const playNote = (
-      freq: number,
-      startTime: number,
-      duration: number,
-      peak = 0.04,
-      type: OscillatorType = 'sine'
-    ) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, startTime);
-      gain.gain.setValueAtTime(0.0001, startTime);
-      gain.gain.linearRampToValueAtTime(peak, startTime + 0.05);
-      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(startTime);
-      osc.stop(startTime + duration);
-    };
-
-    const now = ctx.currentTime;
-
-    const configs = {
-      flute: {
-        scale: [261.63, 293.66, 329.63, 392.0, 440.0, 523.25, 587.33, 659.25],
-        phrase: [0, 1, 2, 4, 5, 4, 3, 2, 1, 0],
-        oscType: 'sine' as OscillatorType,
-        tempo: 720,
-        gain: 0.04,
-      },
-      nadaswaram: {
-        scale: [261.63, 293.66, 329.63, 392.0, 493.88, 523.25, 587.33, 659.25],
-        phrase: [0, 2, 3, 4, 5, 4, 3, 2, 3, 5, 4, 2, 0],
-        oscType: 'triangle' as OscillatorType,
-        tempo: 540,
-        gain: 0.05,
-      },
-      veena: {
-        scale: [261.63, 293.66, 329.63, 369.99, 392.0, 440.0, 493.88, 523.25],
-        phrase: [0, 2, 4, 7, 6, 4, 2, 3, 4, 1, 0],
-        oscType: 'sine' as OscillatorType,
-        tempo: 620,
-        gain: 0.045,
-      },
-    };
-
-    const active = configs[theme];
-
-    for (let i = 0; i < 8; i++) {
-      playNote(active.scale[i], now + i * 0.1, 1.1, active.gain, active.oscType);
-    }
-
-    let step = 0;
-    melodyIntervalRef.current = window.setInterval(() => {
-      if (!audioCtxRef.current || audioCtxRef.current.state !== 'running') return;
-      const t = audioCtxRef.current.currentTime;
-      const freq = active.scale[active.phrase[step % active.phrase.length]];
-
-      playNote(freq, t, 1.35, active.gain, active.oscType);
-      if (theme === 'veena') {
-        playNote(freq * 2, t, 0.8, 0.015, 'sine');
-      }
-      if (step % 4 === 0) {
-        playNote(130.81, t, 2.8, 0.02, 'triangle');
-        playNote(196.0, t, 2.8, 0.015, 'sine');
-      }
-      step++;
-    }, active.tempo);
-
-    setIsPlayingMusic(true);
-  };
-
-  const handleSelectMusicTheme = (newTheme: MusicTheme) => {
-    setMusicTheme(newTheme);
-    startWeddingMusic(newTheme);
-    setShowMusicMenu(false);
   };
 
   const toggleMusic = () => {
     if (isPlayingMusic) {
-      stopAllAudio();
-      if (audioCtxRef.current && audioCtxRef.current.state === 'running') {
-        audioCtxRef.current.suspend();
+      if (customAudioRef.current) {
+        customAudioRef.current.pause();
       }
       setIsPlayingMusic(false);
     } else {
-      startWeddingMusic(musicTheme);
+      playCustomMusic();
     }
   };
 
@@ -240,7 +128,7 @@ export function App() {
   const handleBridgeClick = () => {
     if (stage === 'dusk') {
       setStage('lit');
-      startWeddingMusic(musicTheme);
+      playCustomMusic();
 
       setTimeout(() => {
         confetti({
@@ -258,8 +146,8 @@ export function App() {
   const triggerShower = () => {
     setWishesSent(true);
     confetti({
-      particleCount: 80,
-      spread: 75,
+      particleCount: 90,
+      spread: 80,
       origin: { y: 0.7 },
       colors: ['#D4AF37', '#C5A059', '#F3E5AB', '#FFFDF7'],
     });
@@ -296,7 +184,7 @@ export function App() {
   return (
     <div className="relative min-h-[100dvh] overflow-x-hidden font-sans-clean bg-[#F9F6F0] text-[#2C2520]">
       {/* =====================================================================
-          RESPONSIVE GODAVARI BRIDGE INTRO (PROPORTIONAL ON BOTH MOBILE & DESKTOP)
+          INTERACTIVE GODAVARI BRIDGE STREET LIGHTS INTRO (MANUAL CLICK TO OPEN)
       ===================================================================== */}
       {stage !== 'opened' && (
         <div
@@ -390,7 +278,7 @@ export function App() {
             ) : (
               <div className="animate-fade-up max-w-2xl mx-auto">
                 <p className="text-[10px] sm:text-sm uppercase tracking-[0.28em] sm:tracking-[0.35em] text-[#FFE082] font-medium">
-                  Welcome to Rajamahendravaram
+                  We Invite You To Celebrate
                 </p>
                 <h1 className="font-script text-5xl sm:text-7xl md:text-8xl text-[#FFFDF9] mt-2 leading-tight drop-shadow-[0_4px_24px_rgba(255,200,80,0.85)]">
                   Vijay{' '}
@@ -420,8 +308,7 @@ export function App() {
           </div>
 
           {/* ===============================================================
-              PROPORTIONAL BRIDGE ILLUSTRATION (NEVER SQUISHED ON MOBILE!)
-              Using preserveAspectRatio="xMidYMax slice" keeps arches natural
+              PROPORTIONAL BRIDGE ILLUSTRATION
           =============================================================== */}
           <div className="relative z-20 w-full flex flex-col justify-end flex-1 mt-2">
             <div className="relative w-full h-[52dvh] sm:h-[370px] max-h-[420px]">
@@ -707,7 +594,7 @@ export function App() {
                   );
                 })}
 
-                {/* River Boat & Floating Golden Diyas (Centered in Mobile Viewport Too) */}
+                {/* River Boat & Floating Golden Diyas */}
                 {stage === 'lit' && (
                   <>
                     <g className="animate-boat" transform="translate(480, 315)">
@@ -759,44 +646,16 @@ export function App() {
         ))}
       </div>
 
-      {/* SLEEK UNIFIED SINGLE-ROW BOTTOM NAVIGATION DOCK (FITS ALL PHONES CLEANLY) */}
+      {/* SLEEK UNIFIED SINGLE-ROW BOTTOM NAVIGATION DOCK (NO THEME BUTTON) */}
       <div className="fixed bottom-3 sm:bottom-5 inset-x-0 z-40 flex justify-center px-3 pointer-events-none">
         <div className="pointer-events-auto relative inline-flex items-center gap-1 sm:gap-2 bg-white/95 backdrop-blur-md px-2 py-1.5 rounded-full shadow-[0_10px_30px_rgba(44,37,32,0.18)] border border-[#C5A059]/45 max-w-full">
-          {/* Music Theme Popup Menu */}
-          {showMusicMenu && (
-            <div className="absolute bottom-14 right-0 w-56 bg-white/98 backdrop-blur-md rounded-2xl shadow-2xl border border-[#C5A059]/40 p-2 text-left z-50">
-              <p className="text-[10px] uppercase tracking-widest text-[#8B6F4E] px-3 py-1 font-semibold">
-                Select Music Theme
-              </p>
-              {[
-                { id: 'flute', label: '🪈 Godavari Evening Flute' },
-                { id: 'nadaswaram', label: '🎺 Mangala Nadaswaram' },
-                { id: 'veena', label: '🪕 Royal Veena Chimes' },
-                { id: 'custom', label: '🎵 Custom MP3 Song' },
-              ].map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => handleSelectMusicTheme(item.id as MusicTheme)}
-                  className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium transition flex items-center justify-between ${
-                    musicTheme === item.id
-                      ? 'bg-[#FAF3E3] text-[#9E7B3B] font-semibold'
-                      : 'text-[#3A302A] hover:bg-gray-50'
-                  }`}
-                >
-                  <span>{item.label}</span>
-                  {musicTheme === item.id && <span>✓</span>}
-                </button>
-              ))}
-            </div>
-          )}
-
           {/* Invite Page Tab */}
           <button
             onClick={() => {
               setActivePage('invite');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className={`px-3 sm:px-4 py-1.5 rounded-full text-[11px] sm:text-xs font-medium tracking-wider uppercase transition whitespace-nowrap ${
+            className={`px-3 sm:px-5 py-1.5 rounded-full text-[11px] sm:text-xs font-medium tracking-wider uppercase transition whitespace-nowrap ${
               activePage === 'invite'
                 ? 'bg-[#9E7B3B] text-white shadow-sm'
                 : 'text-[#5C4D42] hover:text-[#2C2520]'
@@ -811,7 +670,7 @@ export function App() {
               setActivePage('gallery');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className={`px-3 sm:px-4 py-1.5 rounded-full text-[11px] sm:text-xs font-medium tracking-wider uppercase transition whitespace-nowrap ${
+            className={`px-3 sm:px-5 py-1.5 rounded-full text-[11px] sm:text-xs font-medium tracking-wider uppercase transition whitespace-nowrap ${
               activePage === 'gallery'
                 ? 'bg-[#9E7B3B] text-white shadow-sm'
                 : 'text-[#5C4D42] hover:text-[#2C2520]'
@@ -820,31 +679,22 @@ export function App() {
             📸 Gallery
           </button>
 
-          <span className="h-4 w-[1px] bg-[#C5A059]/30 mx-0.5" />
+          <span className="h-4 w-[1px] bg-[#C5A059]/30 mx-1" />
 
           {/* Replay Bridge Button */}
           <button
             onClick={() => setStage('dusk')}
-            className="px-2.5 sm:px-3 py-1.5 rounded-full text-[#7A5C29] hover:bg-[#FAF3E3] text-[11px] sm:text-xs font-medium transition whitespace-nowrap"
+            className="px-2.5 sm:px-4 py-1.5 rounded-full text-[#7A5C29] hover:bg-[#FAF3E3] text-[11px] sm:text-xs font-medium transition whitespace-nowrap"
             title="Replay Godavari Bridge Lights"
           >
             🌉 Bridge
           </button>
 
-          {/* Music Theme Selector Button */}
-          <button
-            onClick={() => setShowMusicMenu((prev) => !prev)}
-            className="px-2.5 sm:px-3 py-1.5 rounded-full text-[#7A5C29] hover:bg-[#FAF3E3] text-[11px] sm:text-xs font-medium transition whitespace-nowrap"
-            title="Change Music Theme"
-          >
-            🎵 <span className="hidden sm:inline">Theme</span>
-          </button>
-
           {/* Mute / Unmute Toggle */}
           <button
             onClick={toggleMusic}
-            className="w-8 h-8 rounded-full bg-[#FAF3E3] text-[#7A5C29] flex items-center justify-center text-xs sm:text-sm hover:scale-105 transition shrink-0"
-            title="Mute / Unmute"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#FAF3E3] text-[#7A5C29] flex items-center justify-center text-xs sm:text-sm hover:scale-105 transition shrink-0"
+            title="Mute / Unmute Custom Music"
           >
             {isPlayingMusic ? '🔊' : '🔇'}
           </button>
@@ -856,7 +706,7 @@ export function App() {
       ===================================================================== */}
       {activePage === 'invite' ? (
         <>
-          {/* HERO SECTION: LIGHT MODERN CARD (Responsive for Mobile & Desktop) */}
+          {/* HERO SECTION: LIGHT MODERN CARD */}
           <section className="relative pt-6 pb-8 sm:py-16 px-3.5 sm:px-4 flex justify-center items-center">
             <div className="natural-paper-card max-w-xl w-full rounded-[6px] px-5 py-10 sm:px-16 sm:py-20 text-center relative">
               <div className="absolute inset-2.5 sm:inset-4 border border-[#C5A059]/30 pointer-events-none" />
