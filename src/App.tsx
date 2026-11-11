@@ -68,7 +68,6 @@ export function App() {
 
     return () => {
       audio.pause();
-      audio.src = '';
     };
   }, []);
 
