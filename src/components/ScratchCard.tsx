@@ -108,16 +108,16 @@ export const ScratchCard: React.FC<ScratchCardProps> = ({ onReveal }) => {
       ref={containerRef}
       className="relative w-full max-w-[340px] h-[140px] sm:h-[150px] mx-auto rounded-2xl overflow-hidden shadow-md border border-[#C5A059]/50 bg-[#FDFBF7] select-none touch-none"
     >
-      {/* Underlying Revealed Content */}
+      {/* Underlying Revealed Content: Only Muhurtham Time in Bold */}
       <div className="absolute inset-0 flex flex-col items-center justify-center p-3 text-center bg-gradient-to-br from-[#FFFDF9] to-[#F7EFE4]">
-        <p className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[#8B6F4E] font-sans-clean">
-          Sumuhurtham
+        <p className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[#8B6F4E] font-sans-clean font-bold">
+          Muhurtham
         </p>
-        <p className="text-2xl sm:text-3xl font-serif-wedding font-bold text-[#9E7B3B] mt-0.5">
-          December 3, 2026
+        <p className="text-2xl sm:text-3xl font-serif-wedding font-bold text-[#9E7B3B] mt-1">
+          4:42 AM
         </p>
-        <p className="text-[11px] sm:text-xs font-sans-clean text-[#4A3B32] mt-1 font-medium">
-          4:42 AM <span className="italic font-normal">(Early hrs of Friday, Dec 4)</span>
+        <p className="text-xs sm:text-sm font-sans-clean text-[#4A3B32] mt-1 font-bold">
+          (Early hours of Friday, Dec 4)
         </p>
       </div>
 

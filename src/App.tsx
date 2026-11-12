@@ -2,52 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import { ScratchCard } from './components/ScratchCard';
 
-// ============================================================================
-// 📸 FUTURE PHOTO GALLERY CONFIGURATION
-// ============================================================================
-const GALLERY_PHOTOS = [
-  {
-    id: 1,
-    src: '/images/godavari-road-rail-night.jpg',
-    title: 'Where Our Journey Begins',
-    caption: 'Rajamahendravaram • Banks of the Sacred Godavari',
-  },
-  {
-    id: 2,
-    src: '/images/iskcon-blue-night.jpg',
-    title: 'Divine Blessings',
-    caption: 'Seeking grace for our new chapter together',
-  },
-  {
-    id: 3,
-    src: '/images/couple-1.jpg',
-    title: 'Engagement Moments',
-    caption: 'Two families, one joyous celebration',
-  },
-  {
-    id: 4,
-    src: '/images/couple-2.jpg',
-    title: 'Pre-Wedding Memories',
-    caption: 'Counting down the days to December 3, 2026',
-  },
-  {
-    id: 5,
-    src: '/images/couple-3.jpg',
-    title: 'Together Forever',
-    caption: 'Vijay & Shradha',
-  },
-  {
-    id: 6,
-    src: '/images/couple-4.jpg',
-    title: 'The Celebration Awaits',
-    caption: 'J.K. Gardens, Rajahmundry',
-  },
-];
-
 export function App() {
   const [stage, setStage] = useState<'dusk' | 'lit' | 'opened'>('dusk');
-  const [activePage, setActivePage] = useState<'invite' | 'gallery'>('invite');
-  const [selectedPhoto, setSelectedPhoto] = useState<(typeof GALLERY_PHOTOS)[0] | null>(null);
 
   const [litLamps, setLitLamps] = useState(0);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -155,11 +111,11 @@ export function App() {
   const shareOnWhatsApp = () => {
     const message = encodeURIComponent(
       `✨ *Vijay & Shradha - Wedding Invitation* ✨\n\n` +
-        `Welcome to Rajamahendravaram! We invite you to join us in celebration and bless our union.\n\n` +
+        `Welcome to Rajamahendravaram! We invite you to celebrate the union of Vijay and Shradha.\n\n` +
         `📅 *Date:* Thursday, December 3, 2026\n` +
-        `🍽️ *Dinner:* 7:00 PM onwards\n` +
-        `🕉️ *Sumuhurtham:* 4:42 AM (Early hours of Friday, Dec 4)\n` +
-        `📍 *Venue:* J.K. Gardens, J.N. Road, Rajahmundry\n\n` +
+        `🍽️ *Dinner & Reception:* 7:00 PM onwards\n` +
+        `🕉️ *Muhurtham:* 4:42 AM (Early hours of Friday, Dec 4)\n` +
+        `📍 *Venue:* J.K. Gardens, J.N. Road, Rajahmundry.\n\n` +
         `Tap below to light up the Godavari Bridge & open our wedding invite:\n${window.location.href}`
     );
     window.open(`https://wa.me/?text=${message}`, '_blank');
@@ -168,7 +124,7 @@ export function App() {
   const addToGoogleCalendar = () => {
     const title = encodeURIComponent('Vijay & Shradha Wedding Celebration');
     const details = encodeURIComponent(
-      'Wedding of Chi. Vijay Sri Venkata Krishna Roy & Chi. La. Sow. Shradha. Dinner from 7:00 PM onwards; Sumuhurtham at 4:42 AM (early hours of Friday, Dec 4).'
+      'Wedding of Chi. Vijay Sri Venkata Krishna Roy & Chi. La. Sow. Shradha. Dinner & Reception from 7:00 PM onwards; Muhurtham at 4:42 AM (Early hours of Friday, Dec 4).'
     );
     const location = encodeURIComponent('J.K. Gardens, J.N. Road, Rajahmundry, Andhra Pradesh');
     const dates = '20261203T133000Z/20261204T003000Z';
@@ -276,22 +232,19 @@ export function App() {
               </div>
             ) : (
               <div className="animate-fade-up max-w-2xl mx-auto">
-                <p className="text-[10px] sm:text-sm uppercase tracking-[0.28em] sm:tracking-[0.35em] text-[#FFE082] font-medium">
-                  We Invite You To Celebrate
+                <p className="text-[11px] sm:text-sm uppercase tracking-[0.24em] sm:tracking-[0.32em] text-[#FFE082] font-medium leading-relaxed">
+                  We invite you to celebrate the union of
                 </p>
                 <h1 className="font-script text-5xl sm:text-7xl md:text-8xl text-[#FFFDF9] mt-2 leading-tight drop-shadow-[0_4px_24px_rgba(255,200,80,0.85)]">
                   Vijay{' '}
                   <span className="font-serif-wedding italic text-2xl sm:text-5xl text-[#FFE082] mx-1">
-                    weds
+                    and
                   </span>{' '}
                   Shradha
                 </h1>
-                <p className="font-serif-wedding text-base sm:text-2xl text-[#FFF3CD] tracking-[0.15em] sm:tracking-[0.22em] uppercase mt-1 sm:mt-2">
-                  Thursday, December 3, 2026 • J.K. Gardens
-                </p>
 
                 {/* Mobile & Desktop Prominent Open Button */}
-                <div className="mt-5 sm:mt-6">
+                <div className="mt-6 sm:mt-8">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -623,7 +576,7 @@ export function App() {
       )}
 
       {/* =====================================================================
-          MAIN INVITATION & SEPARATE PHOTO GALLERY PAGE
+          MAIN INVITATION PAGE
       ===================================================================== */}
 
       {/* Soft Floating Gold Petals */}
@@ -645,37 +598,17 @@ export function App() {
         ))}
       </div>
 
-      {/* SLEEK UNIFIED SINGLE-ROW BOTTOM NAVIGATION DOCK (NO THEME BUTTON) */}
+      {/* SLEEK UNIFIED SINGLE-ROW BOTTOM NAVIGATION DOCK (GALLERY REMOVED) */}
       <div className="fixed bottom-3 sm:bottom-5 inset-x-0 z-40 flex justify-center px-3 pointer-events-none">
         <div className="pointer-events-auto relative inline-flex items-center gap-1 sm:gap-2 bg-white/95 backdrop-blur-md px-2 py-1.5 rounded-full shadow-[0_10px_30px_rgba(44,37,32,0.18)] border border-[#C5A059]/45 max-w-full">
           {/* Invite Page Tab */}
           <button
             onClick={() => {
-              setActivePage('invite');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className={`px-3 sm:px-5 py-1.5 rounded-full text-[11px] sm:text-xs font-medium tracking-wider uppercase transition whitespace-nowrap ${
-              activePage === 'invite'
-                ? 'bg-[#9E7B3B] text-white shadow-sm'
-                : 'text-[#5C4D42] hover:text-[#2C2520]'
-            }`}
+            className="px-3 sm:px-5 py-1.5 rounded-full text-[11px] sm:text-xs font-medium tracking-wider uppercase transition whitespace-nowrap bg-[#9E7B3B] text-white shadow-sm"
           >
             💌 Invite
-          </button>
-
-          {/* Gallery Page Tab */}
-          <button
-            onClick={() => {
-              setActivePage('gallery');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            className={`px-3 sm:px-5 py-1.5 rounded-full text-[11px] sm:text-xs font-medium tracking-wider uppercase transition whitespace-nowrap ${
-              activePage === 'gallery'
-                ? 'bg-[#9E7B3B] text-white shadow-sm'
-                : 'text-[#5C4D42] hover:text-[#2C2520]'
-            }`}
-          >
-            📸 Gallery
           </button>
 
           <span className="h-4 w-[1px] bg-[#C5A059]/30 mx-1" />
@@ -700,350 +633,235 @@ export function App() {
         </div>
       </div>
 
-      {/* =====================================================================
-          PAGE 1: MODERN WEDDING INVITATION CARD
-      ===================================================================== */}
-      {activePage === 'invite' ? (
-        <>
-          {/* HERO SECTION: LIGHT MODERN CARD */}
-          <section className="relative pt-6 pb-8 sm:py-16 px-3.5 sm:px-4 flex justify-center items-center">
-            <div className="natural-paper-card max-w-xl w-full rounded-[6px] px-5 py-10 sm:px-16 sm:py-20 text-center relative">
-              <div className="absolute inset-2.5 sm:inset-4 border border-[#C5A059]/30 pointer-events-none" />
+      {/* HERO SECTION: LIGHT MODERN CARD WITH UPDATED MATTER */}
+      <section className="relative pt-6 pb-8 sm:py-16 px-3.5 sm:px-4 flex justify-center items-center">
+        <div className="natural-paper-card max-w-xl w-full rounded-[6px] px-5 py-10 sm:px-16 sm:py-20 text-center relative">
+          <div className="absolute inset-2.5 sm:inset-4 border border-[#C5A059]/30 pointer-events-none" />
 
-              {/* Sacred Golden Trishul & Damaru Emblem */}
-              <div className="flex justify-center mb-5 sm:mb-8">
-                <svg
-                  className="w-9 h-12 sm:w-10 sm:h-14 text-[#A68446]"
-                  viewBox="0 0 64 80"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="32" y1="10" x2="32" y2="72" />
-                  <path d="M27 18 L32 8 L37 18" />
-                  <path d="M32 34 C16 34, 14 20, 18 12 C20 18, 22 25, 32 28" />
-                  <path d="M32 34 C48 34, 50 20, 46 12 C44 18, 42 25, 32 28" />
-                  <polygon points="22,43 32,48 22,53" />
-                  <polygon points="42,43 32,48 42,53" />
-                  <path d="M45 36 A6 6 0 1 0 53 44 A5 5 0 1 1 45 36 Z" />
-                </svg>
-              </div>
-
-              <p className="text-[10px] sm:text-[13px] uppercase tracking-[0.18em] sm:tracking-[0.22em] text-[#3A302A] font-medium leading-relaxed px-2">
-                We invite you to join us in celebration <br />
-                and bless our union
-              </p>
-
-              {/* Vijay & Shradha */}
-              <div className="my-7 sm:my-11">
-                <h1 className="font-serif-wedding text-5xl sm:text-7xl text-[#9E7B3B] font-normal tracking-wide">
-                  Vijay
-                </h1>
-
-                <div className="flex items-center justify-center gap-3 sm:gap-4 my-2 sm:my-3">
-                  <span className="h-[1px] w-10 sm:w-16 bg-[#9E7B3B]/40" />
-                  <span className="font-serif-wedding text-xl sm:text-3xl text-[#2C2520]">&amp;</span>
-                  <span className="h-[1px] w-10 sm:w-16 bg-[#9E7B3B]/40" />
-                </div>
-
-                <h1 className="font-serif-wedding text-5xl sm:text-7xl text-[#9E7B3B] font-normal tracking-wide">
-                  Shradha
-                </h1>
-              </div>
-
-              {/* Intertwined VS Monogram */}
-              <div className="my-5 sm:my-7 flex justify-center">
-                <div className="relative inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20">
-                  <span className="font-script text-4xl sm:text-6xl text-[#9E7B3B] select-none">
-                    V
-                  </span>
-                  <span className="font-serif-wedding text-3xl sm:text-5xl text-[#8A682D] -ml-2.5 sm:-ml-3 mt-2.5 sm:mt-3 select-none">
-                    S
-                  </span>
-                </div>
-              </div>
-
-              <p className="text-[10px] sm:text-[13px] uppercase tracking-[0.18em] sm:tracking-[0.2em] text-[#2C2520] font-medium mt-2 sm:mt-4">
-                To Celebrate Our Wedding
-              </p>
-
-              <p className="font-serif-wedding text-xl sm:text-[28px] text-[#9E7B3B] font-semibold tracking-wider mt-3 sm:mt-4">
-                THURSDAY, DECEMBER 3, 2026
-              </p>
-
-              <p className="text-sm sm:text-lg font-semibold text-[#2C2520] mt-2 tracking-[0.15em]">
-                AT 4:42 AM
-              </p>
-              <p className="font-serif-wedding italic text-sm sm:text-lg text-[#5C4D42] mt-0.5">
-                (Early hours of Friday, Dec 4)
-              </p>
-
-              {/* Venue Details on Card */}
-              <div className="mt-7 sm:mt-9 pt-6 sm:pt-7 border-t border-[#C5A059]/30">
-                <p className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[#5C4D42] font-medium">
-                  Venue
-                </p>
-                <h2 className="font-serif-wedding text-2xl sm:text-3xl font-semibold text-[#2C2520] mt-1 tracking-wider">
-                  J.K. GARDENS
-                </h2>
-                <p className="text-[11px] sm:text-sm uppercase tracking-[0.16em] text-[#3A302A] mt-1">
-                  J.N. Road, Rajahmundry
-                </p>
-
-                <p className="font-serif-wedding text-sm sm:text-lg text-[#9E7B3B] font-semibold tracking-[0.12em] mt-5 sm:mt-6">
-                  DINNER FROM 7:00 PM ONWARDS
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* PARENTS & FAMILY BLESSINGS */}
-          <section className="py-4 sm:py-6 px-3.5 sm:px-4 max-w-xl mx-auto text-center">
-            <div className="natural-paper-card rounded-[6px] p-6 sm:p-10">
-              <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.22em] text-[#8B6F4E]">
-                With the Blessings of
-              </p>
-              <p className="font-serif-wedding italic text-base sm:text-lg text-[#2C2520] mt-1">
-                Sri Mathala Venkata Ramana (Late) &amp; Smt. Lakshmi
-              </p>
-
-              <div className="h-[1px] w-14 bg-[#C5A059]/35 mx-auto my-4 sm:my-5" />
-
-              <p className="text-[10px] sm:text-xs uppercase tracking-[0.2em] text-[#6E5A4F]">
-                Hosted By
-              </p>
-              <h3 className="font-serif-wedding text-xl sm:text-3xl font-semibold text-[#9E7B3B] mt-1">
-                Sri Mathala Ramesh &amp; Smt. Madhavi Sreelatha
-              </h3>
-
-              <div className="mt-5 space-y-2.5 text-xs sm:text-sm text-[#4A3B32] leading-relaxed">
-                <p>
-                  <span className="font-semibold text-[#2C2520]">Groom:</span> Chi. Vijay Sri Venkata
-                  Krishna Roy
-                </p>
-                <p>
-                  <span className="font-semibold text-[#2C2520]">Bride:</span> Chi. La. Sow. Shradha{' '}
-                  <br />
-                  <span className="text-[11px] sm:text-xs text-[#6E5A4F]">
-                    (Only daughter of Sri Manish Paigwar (Late) &amp; Smt. Mamta Paigwar of
-                    Hyderabad)
-                  </span>
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* INTERACTIVE SCRATCH CARD & COUNTDOWN */}
-          <section className="py-8 sm:py-10 px-3.5 sm:px-4 max-w-4xl mx-auto text-center">
-            <span className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[#8B6F4E]">
-              Interactive Reveal
-            </span>
-            <h2 className="font-serif-wedding text-2xl sm:text-4xl font-semibold text-[#2C2520] mt-1 mb-5">
-              Scratch to Unlock the Date
-            </h2>
-
-            <ScratchCard />
-
-            {/* Live Countdown */}
-            <div className="mt-8 grid grid-cols-4 gap-2 sm:gap-5 max-w-md mx-auto">
-              {[
-                { label: 'Days', value: timeLeft.days },
-                { label: 'Hours', value: timeLeft.hours },
-                { label: 'Mins', value: timeLeft.minutes },
-                { label: 'Secs', value: timeLeft.seconds },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="natural-paper-card rounded-lg py-3 px-1.5 sm:p-4"
-                >
-                  <div className="font-serif-wedding text-2xl sm:text-4xl font-bold text-[#9E7B3B]">
-                    {String(item.value).padStart(2, '0')}
-                  </div>
-                  <div className="text-[9px] sm:text-xs uppercase tracking-widest text-[#6E5A4F] mt-0.5">
-                    {item.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* VENUE & GOOGLE MAPS DIRECTIONS */}
-          <section className="py-6 sm:py-8 px-3.5 sm:px-4 max-w-xl mx-auto">
-            <div className="natural-paper-card rounded-[6px] p-6 sm:p-9 text-center">
-              <p className="text-[10px] sm:text-xs uppercase tracking-[0.22em] text-[#8B6F4E]">
-                Wedding Venue &amp; Directions
-              </p>
-              <h3 className="font-serif-wedding text-2xl sm:text-3xl font-semibold text-[#2C2520] mt-1">
-                J.K. Gardens
-              </h3>
-              <p className="text-xs sm:text-sm uppercase tracking-wider text-[#4A3B32] mt-1">
-                J.N. Road, Rajahmundry, Andhra Pradesh
-              </p>
-              <p className="text-xs text-[#9E7B3B] font-semibold mt-3 leading-relaxed">
-                Dinner: Dec 3, 7:00 PM Onwards <br className="sm:hidden" />
-                <span className="hidden sm:inline"> • </span>
-                Sumuhurtham: 4:42 AM (Early Hrs of Friday, Dec 4)
-              </p>
-
-              <div className="mt-5 flex flex-col sm:flex-row justify-center gap-2.5 sm:gap-3">
-                <a
-                  href="https://www.google.com/maps/search/?api=1&query=J.K.+Gardens+J.N.+Road+Rajahmundry"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-full sm:w-auto px-6 py-3 sm:py-2.5 rounded-full bg-[#9E7B3B] text-white text-xs uppercase tracking-widest font-medium hover:bg-[#86662E] transition shadow-sm"
-                >
-                  📍 Open in Google Maps
-                </a>
-                <button
-                  onClick={addToGoogleCalendar}
-                  className="w-full sm:w-auto px-6 py-3 sm:py-2.5 rounded-full border border-[#C5A059] text-[#2C2520] text-xs uppercase tracking-widest font-medium hover:bg-[#C5A059]/10 transition"
-                >
-                  📅 Save to Calendar
-                </button>
-              </div>
-
-              <div className="mt-6 pt-5 border-t border-[#C5A059]/25">
-                <button
-                  onClick={() => {
-                    setActivePage('gallery');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.18em] text-[#9E7B3B] font-semibold hover:underline"
-                >
-                  📸 View Moments &amp; Photo Gallery →
-                </button>
-              </div>
-            </div>
-          </section>
-
-          {/* COMPLIMENTS & FRIENDS SHARE SECTION */}
-          <section className="pt-6 pb-28 px-4 max-w-xl mx-auto text-center">
-            <p className="font-serif-wedding italic text-xl text-[#6E5A4F]">
-              With Best Compliments From
-            </p>
-            <p className="text-[11px] sm:text-xs text-[#4A3B32] mt-2 leading-relaxed">
-              Smt &amp; Sri. Dr. Kamireddy Venkata Ramana • Smt &amp; Sri. Mathala Sreemannarayana •
-              Dr. Mathala Surya Prakasha Rao, Mathala Brothers • Smt &amp; Sri. Mathala Ramakrishna
-              • Smt &amp; Sri. Mathala Hemanth • Sri Gedela Demudu (Late), Smt. Vijayalakshmi • Smt
-              &amp; Sri. Randhi S.V.S. Sridhar • Smt &amp; Sri. Akkina Venkata Srinivasa Rao •
-              Rajamahendri Charitable Trust &amp; Near &amp; Dear
-            </p>
-
-            <div className="mt-7 flex flex-col sm:flex-row justify-center gap-3 px-4 sm:px-0">
-              <button
-                onClick={triggerShower}
-                className="w-full sm:w-auto px-6 py-3 rounded-full bg-gradient-to-r from-[#9E7B3B] to-[#C5A059] text-white font-medium text-xs uppercase tracking-widest shadow-sm hover:brightness-105 active:scale-95 transition-all"
-              >
-                {wishesSent ? '✨ Blessings Sent!' : '✨ Shower Blessings'}
-              </button>
-
-              <button
-                onClick={shareOnWhatsApp}
-                className="w-full sm:w-auto px-6 py-3 rounded-full bg-white border border-[#C5A059] text-[#7A5C29] font-medium text-xs uppercase tracking-widest shadow-sm hover:bg-[#FAF6EE] active:scale-95 transition-all"
-              >
-                📲 Share Invite with Friends
-              </button>
-            </div>
-
-            <p className="mt-9 font-serif-wedding text-2xl text-[#9E7B3B] tracking-widest uppercase">
-              Vijay &amp; Shradha
-            </p>
-          </section>
-        </>
-      ) : (
-        /* =====================================================================
-            PAGE 2: DEDICATED PHOTO GALLERY PAGE
-        ===================================================================== */
-        <section className="pt-8 sm:pt-12 pb-28 px-3.5 sm:px-4 max-w-5xl mx-auto animate-fade-up">
-          <div className="text-center max-w-xl mx-auto mb-8 sm:mb-10">
-            <button
-              onClick={() => setActivePage('invite')}
-              className="mb-3 inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.2em] text-[#8B6F4E] hover:text-[#2C2520] transition"
+          {/* Sacred Golden Trishul & Damaru Emblem */}
+          <div className="flex justify-center mb-5 sm:mb-8">
+            <svg
+              className="w-9 h-12 sm:w-10 sm:h-14 text-[#A68446]"
+              viewBox="0 0 64 80"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              ← Back to Wedding Invitation
-            </button>
-            <p className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[#9E7B3B]">
-              Moments &amp; Memories
-            </p>
-            <h1 className="font-serif-wedding text-3xl sm:text-5xl text-[#2C2520] font-normal mt-1">
-              Vijay &amp; Shradha's Gallery
+              <line x1="32" y1="10" x2="32" y2="72" />
+              <path d="M27 18 L32 8 L37 18" />
+              <path d="M32 34 C16 34, 14 20, 18 12 C20 18, 22 25, 32 28" />
+              <path d="M32 34 C48 34, 50 20, 46 12 C44 18, 42 25, 32 28" />
+              <polygon points="22,43 32,48 22,53" />
+              <polygon points="42,43 32,48 42,53" />
+              <path d="M45 36 A6 6 0 1 0 53 44 A5 5 0 1 1 45 36 Z" />
+            </svg>
+          </div>
+
+          <p className="text-xs sm:text-base uppercase tracking-[0.25em] sm:tracking-[0.3em] text-[#3A302A] font-medium leading-relaxed px-2">
+            ✦ YOU ARE INVITED ✦
+          </p>
+
+          {/* Vijay AND Shradha */}
+          <div className="my-7 sm:my-10">
+            <h1 className="font-serif-wedding text-5xl sm:text-7xl text-[#9E7B3B] font-normal tracking-wide">
+              Vijay
             </h1>
-            <p className="text-xs sm:text-sm text-[#6E5A4F] mt-1.5">
-              A glimpse into our journey and celebrations in Rajamahendravaram
+
+            <div className="flex items-center justify-center gap-3 sm:gap-4 my-2.5 sm:my-3.5">
+              <span className="h-[1px] w-10 sm:w-16 bg-[#9E7B3B]/40" />
+              <span className="font-serif-wedding text-base sm:text-xl tracking-[0.2em] uppercase text-[#2C2520]">
+                AND
+              </span>
+              <span className="h-[1px] w-10 sm:w-16 bg-[#9E7B3B]/40" />
+            </div>
+
+            <h1 className="font-serif-wedding text-5xl sm:text-7xl text-[#9E7B3B] font-normal tracking-wide">
+              Shradha
+            </h1>
+          </div>
+
+
+          <p className="text-xs sm:text-sm uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[#2C2520] font-medium mt-2 sm:mt-4">
+            ARE TYING THE KNOT
+          </p>
+
+          <p className="font-serif-wedding text-xl sm:text-[28px] text-[#9E7B3B] font-semibold tracking-wider mt-3 sm:mt-4">
+            THURSDAY, DECEMBER 3, 2026
+          </p>
+
+          {/* Dinner & Reception */}
+          <div className="mt-6 sm:mt-8">
+            <p className="font-serif-wedding text-base sm:text-xl text-[#2C2520] font-semibold tracking-[0.14em] uppercase">
+              DINNER &amp; RECEPTION
+            </p>
+            <p className="font-serif-wedding text-base sm:text-lg text-[#5C4D42] mt-0.5">
+              7:00 PM onwards
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {GALLERY_PHOTOS.map((photo) => (
-              <div
-                key={photo.id}
-                onClick={() => setSelectedPhoto(photo)}
-                className="natural-paper-card group rounded-lg overflow-hidden p-3 cursor-pointer transition-transform duration-300 hover:-translate-y-1"
-              >
-                <div className="relative h-56 sm:h-64 w-full rounded overflow-hidden bg-[#F3EFE6] flex items-center justify-center">
-                  <img
-                    src={photo.src}
-                    alt={photo.title}
-                    onError={(e) => {
-                      const target = e.currentTarget;
-                      target.style.display = 'none';
-                      const parent = target.parentElement;
-                      if (parent && !parent.querySelector('.placeholder-box')) {
-                        const placeholder = document.createElement('div');
-                        placeholder.className =
-                          'placeholder-box flex flex-col items-center justify-center p-6 text-center text-[#9E7B3B]';
-                        placeholder.innerHTML = `
-                          <span class="font-script text-4xl mb-2">V & S</span>
-                          <span class="text-xs uppercase tracking-widest font-semibold">${photo.title}</span>
-                          <span class="text-[11px] text-[#8B6F4E] mt-1">Add ${photo.src} to public/images/</span>
-                        `;
-                        parent.appendChild(placeholder);
-                      }
-                    }}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                </div>
-                <div className="pt-3 pb-1 px-1 text-center">
-                  <h3 className="font-serif-wedding text-xl font-semibold text-[#2C2520]">
-                    {photo.title}
-                  </h3>
-                  <p className="text-xs text-[#6E5A4F] mt-0.5">{photo.caption}</p>
-                </div>
-              </div>
-            ))}
+          {/* Muhurtham */}
+          <div className="mt-5 sm:mt-6">
+            <p className="font-serif-wedding text-base sm:text-xl text-[#2C2520] font-semibold tracking-[0.14em] uppercase">
+              MUHURTHAM
+            </p>
+            <p className="font-serif-wedding text-base sm:text-lg text-[#5C4D42] mt-0.5">
+              4:42 AM (Early hours of Friday, Dec 4)
+            </p>
           </div>
 
-          {selectedPhoto && (
-            <div
-              onClick={() => setSelectedPhoto(null)}
-              className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
-            >
-              <div
-                onClick={(e) => e.stopPropagation()}
-                className="natural-paper-card max-w-2xl w-full rounded-lg p-4 sm:p-6 text-center relative"
-              >
-                <button
-                  onClick={() => setSelectedPhoto(null)}
-                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-[#2C2520] text-white text-xs flex items-center justify-center"
-                >
-                  ✕
-                </button>
-                <img
-                  src={selectedPhoto.src}
-                  alt={selectedPhoto.title}
-                  className="w-full max-h-[65vh] object-contain rounded mx-auto"
-                />
-                <h3 className="font-serif-wedding text-2xl font-semibold text-[#2C2520] mt-4">
-                  {selectedPhoto.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-[#6E5A4F] mt-1">{selectedPhoto.caption}</p>
+          {/* Venue Details on Card */}
+          <div className="mt-7 sm:mt-9 pt-6 sm:pt-7 border-t border-[#C5A059]/30">
+            <p className="text-xs sm:text-sm uppercase tracking-[0.25em] text-[#5C4D42] font-medium">
+              VENUE
+            </p>
+            <h2 className="font-serif-wedding text-xl sm:text-2xl font-semibold text-[#9E7B3B] mt-1.5 tracking-wider">
+              J.K. GARDENS, J.N. ROAD
+            </h2>
+            <p className="font-serif-wedding text-lg sm:text-xl uppercase tracking-[0.16em] text-[#9E7B3B] mt-0.5 font-semibold">
+              RAJAHMUNDRY.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* PARENTS & FAMILY BLESSINGS */}
+      <section className="py-4 sm:py-6 px-3.5 sm:px-4 max-w-xl mx-auto text-center">
+        <div className="natural-paper-card rounded-[6px] p-6 sm:p-10">
+          <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.22em] text-[#8B6F4E]">
+            With the Blessings of
+          </p>
+          <p className="font-serif-wedding italic text-base sm:text-lg text-[#2C2520] mt-1">
+            Sri Mathala Venkata Ramana (Late) &amp; Smt. Lakshmi
+          </p>
+
+          <div className="h-[1px] w-14 bg-[#C5A059]/35 mx-auto my-4 sm:my-5" />
+
+          <p className="text-[10px] sm:text-xs uppercase tracking-[0.2em] text-[#6E5A4F]">
+            Hosted By
+          </p>
+          <h3 className="font-serif-wedding text-xl sm:text-3xl font-semibold text-[#9E7B3B] mt-1">
+            Sri Mathala Ramesh &amp; Smt. Madhavi Sreelatha
+          </h3>
+
+          <div className="mt-5 space-y-2.5 text-xs sm:text-sm text-[#4A3B32] leading-relaxed">
+            <p>
+              <span className="font-semibold text-[#2C2520]">Groom:</span> Chi. Vijay Sri Venkata
+              Krishna Roy
+            </p>
+            <p>
+              <span className="font-semibold text-[#2C2520]">Bride:</span> Chi. La. Sow. Shradha{' '}
+              <br />
+              <span className="text-[11px] sm:text-xs text-[#6E5A4F]">
+                (Only daughter of Sri Manish Paigwar (Late) &amp; Smt. Mamta Paigwar of Hyderabad)
+              </span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* INTERACTIVE SCRATCH CARD & COUNTDOWN */}
+      <section className="py-8 sm:py-10 px-3.5 sm:px-4 max-w-4xl mx-auto text-center">
+        <span className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[#8B6F4E]">
+          Interactive Reveal
+        </span>
+        <h2 className="font-serif-wedding text-2xl sm:text-4xl font-semibold text-[#2C2520] mt-1 mb-5">
+          Scratch to Unlock the Muhurtham Time
+        </h2>
+
+        <ScratchCard />
+
+        {/* Live Countdown */}
+        <div className="mt-8 grid grid-cols-4 gap-2 sm:gap-5 max-w-md mx-auto">
+          {[
+            { label: 'Days', value: timeLeft.days },
+            { label: 'Hours', value: timeLeft.hours },
+            { label: 'Mins', value: timeLeft.minutes },
+            { label: 'Secs', value: timeLeft.seconds },
+          ].map((item) => (
+            <div key={item.label} className="natural-paper-card rounded-lg py-3 px-1.5 sm:p-4">
+              <div className="font-serif-wedding text-2xl sm:text-4xl font-bold text-[#9E7B3B]">
+                {String(item.value).padStart(2, '0')}
+              </div>
+              <div className="text-[9px] sm:text-xs uppercase tracking-widest text-[#6E5A4F] mt-0.5">
+                {item.label}
               </div>
             </div>
-          )}
-        </section>
-      )}
+          ))}
+        </div>
+      </section>
+
+      {/* VENUE & GOOGLE MAPS DIRECTIONS */}
+      <section className="py-6 sm:py-8 px-3.5 sm:px-4 max-w-xl mx-auto">
+        <div className="natural-paper-card rounded-[6px] p-6 sm:p-9 text-center">
+          <p className="text-[10px] sm:text-xs uppercase tracking-[0.22em] text-[#8B6F4E]">
+            Wedding Venue &amp; Directions
+          </p>
+          <h3 className="font-serif-wedding text-2xl sm:text-3xl font-semibold text-[#2C2520] mt-1">
+            J.K. Gardens
+          </h3>
+          <p className="text-xs sm:text-sm uppercase tracking-wider text-[#4A3B32] mt-1">
+            J.N. Road, Rajahmundry, Andhra Pradesh
+          </p>
+          <p className="text-xs text-[#9E7B3B] font-semibold mt-3 leading-relaxed">
+            Dinner &amp; Reception: Dec 3, 7:00 PM onwards <br className="sm:hidden" />
+            <span className="hidden sm:inline"> • </span>
+            Muhurtham: 4:42 AM (Early hours of Friday, Dec 4)
+          </p>
+
+          <div className="mt-5 flex flex-col sm:flex-row justify-center gap-2.5 sm:gap-3">
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=J.K.+Gardens+J.N.+Road+Rajahmundry"
+              target="_blank"
+              rel="noreferrer"
+              className="w-full sm:w-auto px-6 py-3 sm:py-2.5 rounded-full bg-[#9E7B3B] text-white text-xs uppercase tracking-widest font-medium hover:bg-[#86662E] transition shadow-sm"
+            >
+              📍 Open in Google Maps
+            </a>
+            <button
+              onClick={addToGoogleCalendar}
+              className="w-full sm:w-auto px-6 py-3 sm:py-2.5 rounded-full border border-[#C5A059] text-[#2C2520] text-xs uppercase tracking-widest font-medium hover:bg-[#C5A059]/10 transition"
+            >
+              📅 Save to Calendar
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* COMPLIMENTS & FRIENDS SHARE SECTION */}
+      <section className="pt-6 pb-28 px-4 max-w-xl mx-auto text-center">
+        <p className="font-serif-wedding italic text-xl text-[#6E5A4F]">
+          With Best Compliments From
+        </p>
+        <p className="text-[11px] sm:text-xs text-[#4A3B32] mt-2 leading-relaxed">
+          Smt &amp; Sri. Dr. Kamireddy Venkata Ramana • Smt &amp; Sri. Mathala Sreemannarayana •
+          Dr. Mathala Surya Prakasha Rao, Mathala Brothers • Smt &amp; Sri. Mathala Ramakrishna •
+          Smt &amp; Sri. Mathala Hemanth • Sri Gedela Demudu (Late), Smt. Vijayalakshmi • Smt &amp;
+          Sri. Randhi S.V.S. Sridhar • Smt &amp; Sri. Akkina Venkata Srinivasa Rao • Rajamahendri
+          Charitable Trust &amp; Near &amp; Dear
+        </p>
+
+        <div className="mt-7 flex flex-col sm:flex-row justify-center gap-3 px-4 sm:px-0">
+          <button
+            onClick={triggerShower}
+            className="w-full sm:w-auto px-6 py-3 rounded-full bg-gradient-to-r from-[#9E7B3B] to-[#C5A059] text-white font-medium text-xs uppercase tracking-widest shadow-sm hover:brightness-105 active:scale-95 transition-all"
+          >
+            {wishesSent ? '✨ Blessings Sent!' : '✨ Shower Blessings'}
+          </button>
+
+          <button
+            onClick={shareOnWhatsApp}
+            className="w-full sm:w-auto px-6 py-3 rounded-full bg-white border border-[#C5A059] text-[#7A5C29] font-medium text-xs uppercase tracking-widest shadow-sm hover:bg-[#FAF6EE] active:scale-95 transition-all"
+          >
+            📲 Share Invite with Friends
+          </button>
+        </div>
+
+        <p className="mt-9 font-serif-wedding text-2xl text-[#9E7B3B] tracking-widest uppercase">
+          Vijay &amp; Shradha
+        </p>
+      </section>
     </div>
   );
 }
